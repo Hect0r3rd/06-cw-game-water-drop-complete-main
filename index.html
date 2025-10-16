@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Drop Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-wrapper">
+        <img src="img/cw_logo-horizontal.png" alt="charity: water logo" class="brand-logo">
+        <h1 class="game-title">Water Drop</h1>
+        <p class="game-tagline">Catch the good drops, avoid the bad ones!</p>
+        <div class="score-panel">
+            <div class="score">Score: <span id="score">0</span></div>
+            <div class="timer">Time: <span id="time">45</span>s</div>
+            <button id="start-btn">Start Game</button>
+            <button id="reset-btn">Reset</button>
+        </div>
+        
+        <div id="game-container">
+            <img id="water-can" src="img/water-can-transparent.png" alt="Water Can" tabindex="0">
+        </div>
+
+        <!-- End of Game Overlay (hidden until game ends) -->
+    <div id="message-overlay" class="hidden" aria-hidden="true" style="display:none;">
+            <div class="message-box" role="dialog" aria-modal="true" aria-labelledby="end-title" aria-describedby="end-message">
+                <h2 id="end-title">Game Over</h2>
+                <p id="end-message">Nice try! Want to play again?</p>
+                <button id="play-again-btn">Play Again</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
