@@ -24,32 +24,74 @@ Fonts:
     box-sizing: border-box;
 }
 
+:root {
+    --cw-blue: #2E9DF7;
+    --cw-yellow: #FFC907;
+    --cw-green: #4FCB53;
+    --cw-light: #8BD1CB;
+}
+
 body {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     background: linear-gradient(180deg, #ffffff 0%, #e6f7ff 100%);
-    font-family: Arial, Helvetica, sans-serif;
+    /* Use Poppins for a modern, friendly geometric sans similar to the brand */
+    font-family: 'Poppins', Arial, Helvetica, sans-serif;
 }
 
 .game-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 200px 1fr 200px; /* left, main, right */
     gap: 20px;
+    align-items: start;
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
+    margin: 0 auto;
 }
 
 .brand-logo {
     width: 220px;
     height: auto;
+    margin: 0 auto 8px;
+    display: block;
+}
+
+.main-column { grid-column: 2 / 3; padding: 0 12px; }
+
+.game-title-container { display:flex; align-items:center; gap:12px; justify-content:center; margin-bottom:6px; }
+.game-title-drop { width:40px; height:40px; object-fit:contain; }
+.game-title-bad-drop { width:40px; height:40px; object-fit:contain; opacity:0.95; transform: translateY(0px); }
+.cw-badge { background:var(--cw-yellow); color:#072; padding:6px 10px; border-radius:999px; font-weight:700; font-size:13px; }
+/* Header badge variants */
+.header-badge { font-size:12px; padding:5px 10px; margin-left:6px; }
+.neutral-badge { background: var(--cw-yellow); color: #064; border-radius: 999px; padding: 6px 10px; font-weight:700; text-decoration:none; display:inline-block; }
+
+/* Subtle bobbing animation for header drops */
+.game-title-drop, .game-title-bad-drop {
+    animation: bob 3.6s ease-in-out infinite;
+    transition: transform 120ms ease, opacity 120ms ease;
+}
+
+@keyframes bob {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+    100% { transform: translateY(0); }
+}
+
+.game-title-drop:hover, .game-title-bad-drop:hover { transform: scale(1.06); }
+
+@media (prefers-reduced-motion: reduce) {
+    .game-title-drop, .game-title-bad-drop { animation: none; transition: none; }
 }
 
 .score-panel {
     display: flex;
     justify-content: space-between;  /* Space between score and button */
     align-items: center;
-    width: 800px;
+    width: 100%;
     padding: 10px;
     background-color: #fff;
     border-radius: 8px;
@@ -58,19 +100,144 @@ body {
 
 .timer {
     flex: 0 1 auto;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: bold;
 }
 
 #game-container {
-    width: 800px;
+    width: 100%;
+    max-width: 800px;
     height: 600px;
     background-color: #e6f7ff;
     border: 2px solid #333;
     border-radius: 8px;
     position: relative;
     overflow: hidden;
+    margin: 0 auto;
 }
+
+/* Decorative side panels that sit alongside the main column */
+.side-panel {
+    position: relative;
+    width: 100%;
+    max-width: 200px;
+    background: linear-gradient(180deg, rgba(46,157,247,0.06), rgba(76,203,83,0.05));
+    border-radius: 10px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 6px 18px rgba(18,52,86,0.06);
+    color: #0b2a3a;
+}
+
+.side-logo { width: 96px; height: auto; opacity: 0.95; }
+.side-text { font-size: 13px; text-align: center; color: #234a5a; padding: 0 6px; }
+.side-text, .side-panel { word-wrap: break-word; overflow-wrap: break-word; hyphens: auto; }
+
+/* Allow the score panel to wrap when space is limited */
+.score-panel { flex-wrap: wrap; gap: 8px; }
+
+.difficulty select {
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+.difficulty { display:flex; align-items:center; gap:8px; }
+.difficulty-badge { width:14px; height:14px; border-radius:50%; display:inline-block; box-shadow:0 1px 2px rgba(0,0,0,0.12); }
+.difficulty-badge.easy { background:#4FCB53; }
+.difficulty-badge.normal { background:var(--cw-blue); }
+.difficulty-badge.hard { background:#FF902A; }
+
+.sr-only { position: absolute !important; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px); white-space: nowrap; }
+
+/* Score popup animation when player collects a drop */
+.score-popup {
+    position: absolute;
+    pointer-events: none;
+    font-weight: 700;
+    color: var(--cw-blue);
+    opacity: 0;
+    transform: translateY(0);
+    animation: popup 900ms ease-out forwards;
+}
+
+@keyframes popup {
+    0% { opacity: 1; transform: translateY(0) scale(1.0); }
+    100% { opacity: 0; transform: translateY(-40px) scale(1.1); }
+}
+
+.goal { font-weight:700; color:#0b2a3a; }
+
+/* Small can catch animation */
+.can-catch { transform: translateY(-6px) scale(1.03); transition: transform 140ms ease; }
+
+/* Keep controls aligned to the right when there's room */
+.controls { display: flex; gap: 8px; margin-left: auto; }
+
+/* On narrow screens, stack score elements to avoid overlap */
+@media (max-width: 600px) {
+    .score-panel { flex-direction: column; align-items: center; }
+    .controls { margin-left: 0; }
+}
+
+/* Footer CTA (clean, centered, accessible) */
+.cta-footer {
+    margin-top: 14px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #0b2a3a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background: rgba(46,157,247,0.04);
+}
+
+.cta-text { margin: 0; color: #0b2a3a; font-weight:600; }
+
+.cta-actions { display:flex; gap:10px; }
+
+.donate-btn {
+    display: inline-block;
+    padding: 10px 16px;
+    background: var(--cw-blue);
+    color: white;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 800;
+    box-shadow: 0 6px 14px rgba(46,157,247,0.18);
+    transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+}
+.donate-btn:hover { background: #1f82d6; transform: translateY(-2px); box-shadow: 0 10px 24px rgba(31,130,214,0.22); }
+
+/* Keyboard focus for accessibility */
+.donate-btn:focus-visible {
+    outline: 3px solid rgba(255,201,7,0.8);
+    outline-offset: 4px;
+}
+
+/* Milestone banner that briefly shows congratulatory messages */
+.milestone-banner {
+    position: fixed;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(46,157,247,0.95);
+    color: white;
+    padding: 12px 18px;
+    border-radius: 999px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+    font-weight: 700;
+    z-index: 99999;
+    opacity: 0;
+    transition: opacity 220ms ease, transform 220ms ease;
+}
+.milestone-banner.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.milestone-banner.hidden { display: none; }
 
 
 #start-btn, #play-again-btn {
@@ -95,15 +262,14 @@ body {
 
 .water-drop {
     position: absolute;
-    width: 60px;  /* increased from 40px */
-    height: 60px; /* increased from 40px */
-    background-color: #2E9DF7; /* cw blue */
-    border-radius: 50%;
+    width: 60px;  /* default, overridden inline by JS for variety */
+    height: 60px;
     animation: dropFall linear forwards;
     transform-origin: center;
     cursor: pointer;
-    padding: 15px;  /* Add padding for larger click area */
-    margin: -15px;  /* Offset padding to maintain visual size */
+    object-fit: contain; /* make PNG scale inside the element */
+    padding: 0;
+    margin: 0;
     transition: transform 0.1s ease;  /* Smooth hover effect */
 }
 
@@ -112,7 +278,8 @@ body {
 }
 
 .bad-drop {
-    background-color: #F5402C; /* cw red */
+    /* visual appearance handled by external `img/Bad_Drop.png` */
+    object-fit: contain;
 }
 
 .game-title {
@@ -152,6 +319,9 @@ body {
     text-align: center;
 }
 
+.result-line { font-size: 20px; font-weight: 800; margin-bottom: 8px; color: var(--cw-blue); }
+.message-detail { font-size: 16px; color: #333; }
+
 .message-box h2 {
     margin-bottom: 10px;
 }
@@ -160,6 +330,11 @@ body {
     margin-bottom: 16px;
     font-size: 18px;
 }
+
+.overlay-actions { display:flex; gap:10px; justify-content:center; margin-top:8px; }
+.overlay-actions button { padding:8px 14px; border-radius:6px; border:none; cursor:pointer; }
+.overlay-actions #try-new-mode-btn { background: transparent; color: var(--cw-blue); border: 2px solid var(--cw-blue); }
+.overlay-actions #play-again-btn { background: var(--cw-green); color: white; }
 
 @keyframes dropFall {
     from {
@@ -170,14 +345,15 @@ body {
     }
 }
 
-@media (max-width: 850px) {
-    .game-wrapper, .score-panel, #game-container {
-        width: 95vw;
-    }
-    
-    #game-container {
-        height: 70vh;
-    }
+@media (max-width: 1100px) {
+    .game-wrapper { grid-template-columns: 140px 1fr 140px; }
+}
+
+@media (max-width: 900px) {
+    .game-wrapper { grid-template-columns: 1fr; }
+    .side-panel { display: none; }
+    .main-column { order: 1; }
+    #game-container { height: 60vh; }
 }
 
 /* Accessibility: focus styles for buttons */
@@ -187,12 +363,20 @@ button:focus-visible {
 }
 
 #water-can {
-  position: absolute;
-  bottom: 0;
-  left: 370px; /* Centered for 800px width */
-  width: 80px;
-  height: 80px;
-  z-index: 2;
-  transition: left 0.15s;
-  user-select: none;
+    position: absolute;
+    bottom: 0;
+    left: calc(50% - 40px); /* centered relative to the container */
+    width: 80px;
+    height: 80px;
+    z-index: 2;
+    transition: left 0.15s;
+    user-select: none;
+}
+
+/* Controls wrapper to keep start/reset aligned */
+.controls { display: flex; gap: 8px; }
+
+/* Make buttons a little smaller on narrow screens */
+@media (max-width: 480px) {
+        #start-btn, #play-again-btn, #reset-btn { padding: 6px 10px; font-size: 14px; }
 }

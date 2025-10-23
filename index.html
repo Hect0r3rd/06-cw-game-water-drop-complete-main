@@ -5,33 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Water Drop Game</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Use a friendly geometric sans similar to charity: water's brand -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="game-wrapper">
-        <img src="img/cw_logo-horizontal.png" alt="charity: water logo" class="brand-logo">
-        <h1 class="game-title">Water Drop</h1>
-        <p class="game-tagline">Catch the good drops, avoid the bad ones!</p>
-        <div class="score-panel">
-            <div class="score">Score: <span id="score">0</span></div>
-            <div class="timer">Time: <span id="time">45</span>s</div>
-            <button id="start-btn">Start Game</button>
-            <button id="reset-btn">Reset</button>
-        </div>
-        
-        <div id="game-container">
-            <img id="water-can" src="img/water-can-transparent.png" alt="Water Can" tabindex="0">
+        <!-- Left side panel -->
+        <aside class="side-panel left-panel" aria-hidden="true">
+            <img src="img/cw_logo.png" alt="charity: water" class="side-logo">
+            <p class="side-text">charity: water brings clean water to communities in need. Learn more and support the cause.</p>
+        </aside>
+
+        <!-- Main centered column containing the game -->
+        <div class="main-column">
+            <img src="img/cw_logo-horizontal.png" alt="charity: water logo" class="brand-logo">
+            <!-- Title with a good-drop image to the left -->
+            <div class="game-title-container">
+                <img src="img/Drop.png" alt="water drop" class="game-title-drop" aria-hidden="true">
+                <h1 class="game-title">Water Drop</h1>
+                <img src="img/Bad_Drop.png" alt="bad drop" class="game-title-bad-drop" aria-hidden="true">
+            </div>
+            <p class="game-tagline">Catch the good drops, avoid the bad ones!</p>
+            <div class="score-panel">
+                <div class="score">Score: <span id="score">0</span></div>
+                <div class="timer">Time: <span id="time">45</span>s</div>
+                <div class="difficulty">
+                    <label for="difficulty-select" class="sr-only">Difficulty</label>
+                    <select id="difficulty-select" aria-label="Choose difficulty">
+                        <option value="Easy">Easy</option>
+                        <option value="Normal" selected>Normal</option>
+                        <option value="Hard">Hard</option>
+                    </select>
+                    <span id="difficulty-badge" class="difficulty-badge" aria-hidden="true"></span>
+                </div>
+                <div class="goal">Goal: <span id="win-goal">20</span> pts</div>
+                <div class="controls">
+                    <button id="start-btn">Start Game</button>
+                    <button id="reset-btn">Reset</button>
+                </div>
+            </div>
+
+            <div id="game-container">
+                <img id="water-can" src="img/water-can-transparent.png" alt="Water Can" tabindex="0">
+            </div>
+
+            <div class="cta-footer" role="contentinfo">
+                <p class="cta-text">Help bring clean water to communities in need.</p>
+                <div class="cta-actions">
+                    <a href="https://www.charitywater.org/donate" target="_blank" rel="noopener" class="donate-btn">Donate</a>
+                </div>
+            </div>
         </div>
 
+        <!-- Right side panel -->
+        <aside class="side-panel right-panel" aria-hidden="true">
+            <img src="img/cw_logo.png" alt="charity: water" class="side-logo">
+            <p class="side-text">Your score helps spread awareness — consider visiting charity:water to donate.</p>
+        </aside>
         <!-- End of Game Overlay (hidden until game ends) -->
     <div id="message-overlay" class="hidden" aria-hidden="true" style="display:none;">
             <div class="message-box" role="dialog" aria-modal="true" aria-labelledby="end-title" aria-describedby="end-message">
                 <h2 id="end-title">Game Over</h2>
                 <p id="end-message">Nice try! Want to play again?</p>
-                <button id="play-again-btn">Play Again</button>
+                <div class="overlay-actions">
+                    <button id="play-again-btn">Play Again</button>
+                    <button id="try-new-mode-btn">Try a New Mode</button>
+                </div>
             </div>
         </div>
     </div>
     
+    <!-- Audio elements (place audio files in audio/ folder) -->
+    <audio id="sfx-collect" src="audio/collect.mp3" preload="auto"></audio>
+    <audio id="sfx-miss" src="audio/miss.mp3" preload="auto"></audio>
+    <audio id="sfx-button" src="audio/button.mp3" preload="auto"></audio>
+    <audio id="sfx-win" src="audio/win.mp3" preload="auto"></audio>
+
+    <!-- Milestone message container -->
+    <div id="milestone-banner" class="milestone-banner hidden" aria-live="polite" aria-atomic="true"></div>
+
     <script src="script.js"></script>
 </body>
 </html>
